@@ -1,1 +1,165 @@
-
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ guild_name }} - Discord Ticket Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <h1>Discord Ticket Bot</h1>
+        </div>
+        <div class="navbar-user">
+            {% if user.avatar_url %}
+            <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="avatar">
+            {% else %}
+            <div class="avatar-placeholder">{{ user.username[:1] }}</div>
+            {% endif %}
+            <span>{{ user.username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+    
+    <div class="breadcrumb">
+        <a href="{{ url_for('dashboard') }}"><i class="fas fa-home"></i> Dashboard</a>
+        <span> > </span>
+        <span>{{ guild_name }}</span>
+    </div>
+    
+    <main class="main-container">
+        <div class="server-header">
+            <h2>{{ guild_name }}</h2>
+            <div class="server-id">Server ID: {{ guild_id }}</div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="general">Allgemein</button>
+            <button class="tab-btn" data-tab="categories">Ticket-Kategorien</button>
+            <button class="tab-btn" data-tab="roles">Rollen-Einstellungen</button>
+            <button class="tab-btn" data-tab="tickets">Ticket-Übersicht</button>
+        </div>
+        
+        <div class="tab-content active" id="general">
+            <div class="settings-card">
+                <h3>Allgemeine Einstellungen</h3>
+                
+                <div class="setting-item">
+                    <label for="log-channel">Log-Kanal</label>
+                    <div class="select-container">
+                        <select id="log-channel">
+                            <option value="">Auswählen...</option>
+                            <!-- Wird per JavaScript gefüllt -->
+                        </select>
+                    </div>
+                    <button id="save-log-channel" class="btn primary">Speichern</button>
+                </div>
+                
+                <div class="setting-item">
+                    <label for="ticket-channel">Ticket-Panel erstellen in</label>
+                    <div class="select-container">
+                        <select id="ticket-channel">
+                            <option value="">Auswählen...</option>
+                            <!-- Wird per JavaScript gefüllt -->
+                        </select>
+                    </div>
+                    <button id="create-ticket-panel" class="btn primary">Panel erstellen</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="categories">
+            <div class="settings-card">
+                <h3>Ticket-Kategorien</h3>
+                <p>Definieren Sie die verschiedenen Arten von Tickets, die Benutzer erstellen können.</p>
+                
+                <div id="categories-container">
+                    <!-- Wird per JavaScript gefüllt -->
+                </div>
+                
+                <button id="add-category" class="btn secondary">
+                    <i class="fas fa-plus"></i> Kategorie hinzufügen
+                </button>
+                
+                <div class="action-buttons">
+                    <button id="save-categories" class="btn primary">Kategorien speichern</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="roles">
+            <div class="settings-card">
+                <h3>Rollen-Einstellungen</h3>
+                <p>Wählen Sie aus, welche Rollen Zugriff auf alle Tickets haben sollen.</p>
+                
+                <div class="setting-item">
+                    <label>Admin-Rollen</label>
+                    <div class="roles-container" id="admin-roles">
+                        <!-- Wird per JavaScript gefüllt -->
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="save-roles" class="btn primary">Rollen speichern</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="tickets">
+            <div class="settings-card">
+                <h3>Ticket-Übersicht</h3>
+                <p>Eine Übersicht aller erstellten Tickets auf diesem Server.</p>
+                
+                <div class="tickets-filter">
+                    <select id="ticket-status-filter">
+                        <option value="all">Alle Tickets</option>
+                        <option value="open">Offene Tickets</option>
+                        <option value="closed">Geschlossene Tickets</option>
+                    </select>
+                </div>
+                
+                <div class="tickets-table-container">
+                    <table class="tickets-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Kategorie</th>
+                                <th>Benutzer</th>
+                                <th>Status</th>
+                                <th>Erstellt am</th>
+                                <th>Geschlossen am</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tickets-list">
+                            <!-- Wird per JavaScript gefüllt -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Templates -->
+    <template id="category-template">
+        <div class="category-item">
+            <div class="category-header">
+                <h4>Kategorie</h4>
+                <button class="btn-icon delete-category"><i class="fas fa-trash"></i></button>
+            </div>
+            <div class="category-form">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="category-name" placeholder="z.B. Support">
+                </div>
+                <div class="form-group">
+                    <label>Beschreibung</label>
+                    <input type="text" class="category-description" placeholder="z.B. Hilfe vom Support-Team">
+                </div>
+                <div class="form-group">
+                    <label>Farbe</label>
+                    <input type="color" class="category-color" value="#3498db">
+                </div>
+                <div class="form-group">
+                    <label>
