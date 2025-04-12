@@ -1,1 +1,59 @@
-
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Ticket Bot - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <h1>Discord Ticket Bot</h1>
+        </div>
+        <div class="navbar-user">
+            {% if user.avatar_url %}
+            <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="avatar">
+            {% else %}
+            <div class="avatar-placeholder">{{ user.username[:1] }}</div>
+            {% endif %}
+            <span>{{ user.username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i></a>
+        </div>
+    </nav>
+    
+    <main class="main-container">
+        <div class="dashboard-header">
+            <h2>Deine Server</h2>
+            <p>Wähle einen Server aus, um die Einstellungen zu verwalten</p>
+        </div>
+        
+        <div class="server-grid">
+            {% if guilds %}
+                {% for guild in guilds %}
+                <a href="{{ url_for('guild_settings', guild_id=guild.id) }}" class="server-card">
+                    {% if guild.icon %}
+                    <img src="{{ guild.icon }}" alt="{{ guild.name }}" class="server-icon">
+                    {% else %}
+                    <div class="server-icon-placeholder">{{ guild.name[:1] }}</div>
+                    {% endif %}
+                    <div class="server-name">{{ guild.name }}</div>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="no-servers">
+                    <p>Du hast keine Server, auf denen du Administrator bist oder der Bot ist nicht auf deinen Servern.</p>
+                    <a href="https://discord.com/api/oauth2/authorize?client_id={{ config.CLIENT_ID }}&permissions=8&scope=bot%20applications.commands" target="_blank" class="add-bot-btn">
+                        <i class="fas fa-plus"></i> Bot zu Server hinzufügen
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <p>Discord Ticket Bot Dashboard &copy; 2025</p>
+    </footer>
+</body>
+</html>
