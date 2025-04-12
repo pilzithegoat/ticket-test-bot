@@ -1,1 +1,29 @@
-
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Ticket Bot - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Discord Ticket Bot</h1>
+                <p>Verwalten Sie Ihr Ticket-System</p>
+            </div>
+            <div class="login-content">
+                <p>Melden Sie sich mit Ihrem Discord-Konto an, um auf das Dashboard zuzugreifen.</p>
+                <a href="{{ url_for('login') }}" class="discord-login-btn">
+                    <i class="fab fa-discord"></i> Mit Discord anmelden
+                </a>
+            </div>
+            <div class="login-footer">
+                <p>Sie benötigen Administratorrechte auf einem Server, auf dem der Bot ist.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
